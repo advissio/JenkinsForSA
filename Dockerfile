@@ -8,5 +8,6 @@ RUN apt-get install openssl ca-certificates \
      && update-ca-certificates
 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 COPY casc.yaml /var/jenkins_home/casc.yaml
-
-
+# installo JDK1.8
+RUN apt-get install openjdk-8-jdk
+## da modificare anche casc.yaml per JAVA_HOME
