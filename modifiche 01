@@ -1,0 +1,101 @@
+============================================
+01 6/6/22 19:40
+
+Dockerfile:
+
+FROM jenkins/jenkins:2.249.3 --> 2.263.1
+--------------------------------------------
+plugins.txt:
+
+structs:1.20 --> 1.23
+credentials:2.3.14 --> 2.5
+script-security:1.75 --> 1.77
+configuration-as-code:1.46 --> 1.51
+trilead-api:1.0.12 --> 1.0.13
+jackson2-api:2.11.3 --> 2.12.1
+
+============================================
+02 6/6/22 19:49
+
+Dockerfile:
+rimossa ultima linea 
+COPY casc.yaml /var/jenkins_home/casc.yaml
+
+
+============================================
+03 6/6/22 19:52
+
+Dockerfile:
+rimossa terza linea 
+ENV CASC_JENKINS_CONFIG /var/jenkins_home/casc.yaml
+
+
+
+2.263.1 --> 2.777.1
+2.777.1 --> 2.777.4
+
+
+
+jackson2-api:2.12.1 --> 2.13.xxx
+snakeyaml-api1.27.0 1.29.1
+
+
+Update required: Credentials Plugin (2.5) to be updated to 2.6.1 or higher
+ - Update required: Pipeline: Multibranch (2.22) to be updated to 2.26 or higher
+ - Update required: Branch API Plugin (2.6.2) to be updated to 2.7.0 or higher
+
+
+
+- Update required: Folders Plugin (6.15) to be updated to 6.16 or higher
+ - Update required: SCM API Plugin (2.6.4) to be updated to 2.6.5 or higher
+- Update required: Pipeline: API (2.40) to be updated to 2.45 or higher
+ - Update required: Pipeline: SCM Step (2.11) to be updated to 2.12 or higher
+ - Update required: Pipeline: Supporting APIs (3.6) to be updated to 3.8 or higher
+ - Update required: Pipeline: Groovy (2.86) to be updated to 2.92 or higher
+Update required: Jenkins Mailer Plugin (1.32.1) to be updated to 1.34 or higher
+pdate required: Display URL API (2.3.3) to be updated to 2.3.5 or higher
+ - Update required: Jenkins Git plugin (4.4.5) to be updated to 4.6.0 or higher
+
+
+
+Update required: Token Macro Plugin (2.12) to be updated to 2.13 or higher
+- Update required: Pipeline: Job (2.40) to be updated to 2.41 or higher
+Update required: Pipeline: Groovy (2.92) to be updated to 2.94 or higher
+ - Update required: JUnit Plugin (1.44) to be updated to 1.53 or higher
+
+
+
+- Update required: Bootstrap 4 API Plugin (4.5.3-1) to be updated to 4.6.0-3 or higher
+ - Update required: Plugin Utilities API Plugin (1.4.0) to be updated to 2.4.0 or higher
+ - Update required: Pipeline: API (2.45) to be updated to 2.46 or higher
+ - Update required: Checks API plugin (1.1.1) to be updated to 1.7.2 or higher
+ - Update required: Script Security Plugin (1.77) to be updated to 1.78 or higher
+ - Update required: ECharts API Plugin (4.9.0-2) to be updated to 5.0.2-1 or higher
+- Update required: Pipeline: SCM Step (2.12) to be updated to 2.13 or higher
+ - Update required: Pipeline: API (2.45) to be updated to 2.46 or higher
+
+
+
+ - Update required: JQuery3 API Plugin (3.5.1-2) to be updated to 3.5.1-3 or higher
+ - Update required: Popper.js API Plugin (1.16.0-7) to be updated to 1.16.1-2 or higher
+ - Update required: Font Awesome API Plugin (5.15.1-1) to be updated to 5.15.2-2 or higher
+ - Update required: JQuery3 API Plugin (3.5.1-2) to be updated to 3.6.0-1 or higher
+
+
+- Update required: Jenkins Git plugin (4.6.0) to be updated to 4.8.3 or higher
+ - Update required: Pipeline: Stage Tags Metadata (1.7.2) to be updated to 1.9.2 or higher
+ - Update required: Pipeline Graph Analysis Plugin (1.10) to be updated to 1.11 or higher
+ - Update required: Pipeline: Declarative (1.7.2) to be updated to 1.9.2 or higher
+ - Update required: Pipeline: Nodes and Processes (2.37) to be updated to 2.40 or higher
+ - Update required: Pipeline: Build Step (2.13) to be updated to 2.15 or higher
+ - Update required: Pipeline: API (2.46) to be updated to 2.47 or higher
+
+ - Update required: Credentials Binding Plugin (1.24) to be updated to 1.27 or higher
+ - Update required: Durable Task Plugin (1.35) to be updated to 1.36 or higher
+
+- Update required: Pipeline: Declarative Extension Points API (1.7.2) to be updated to 1.9.2 or higher
+ - Update required: Pipeline: Shared Groovy Libraries (2.17) to be updated to 2.19 or higher
+ - Update required: Pipeline: Model API (1.7.2) to be updated to 1.9.2 or higher
+
+- Update required: Pipeline: Milestone Step (1.3.1) to be updated to 1.3.2 or higher
+

@@ -1,0 +1,135 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>applicationID</name>
+          <description>Nome dell&apos;appplicazione come da catalogo Rai Pubblicità</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>descrizioneApp</name>
+          <description>Diventa il nome dell&apos;applicazione in Kiuwan</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>analisi</name>
+          <description>Analisi S/N</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>LABEL</name>
+          <description>Diventa la descrizione dell&apos;analisi in Kiuwan</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.32">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>/root/.jenkins/workspace/SVN_repository</customWorkspace>
+  <builders/>
+  <publishers>
+    <com.kiuwan.plugins.kiuwanJenkinsPlugin.KiuwanRecorder plugin="kiuwanJenkinsPlugin@1.6.0">
+      <connectionProfileUuid>ybcm-8Q4N</connectionProfileUuid>
+      <sourcePath>./${applicationID}</sourcePath>
+      <outputFilename>kiuwan/output.json</outputFilename>
+      <selectedMode>STANDARD_MODE</selectedMode>
+      <applicationName>${descrizioneApp}</applicationName>
+      <label>#${LABEL}</label>
+      <encoding>UTF-8</encoding>
+      <includes></includes>
+      <excludes>**/src/test/**,**/__MACOSX/**,**/*.min.js,**/*.Designer.vb,**/*.designer.vb,**/*Reference.vb,**/*Service.vb,**/*Silverlight.vb,**/*.Designer.cs,**/*.designer.cs,**/*Reference.cs,**/*Service.cs,**/*Silverlight.cs,**/.*,**/Pods/BuildHeaders/**/*.h,**/Pods/Headers/**/*.h,**/node_modules/**,**/bower_components/**,**/target/**,**/bin/**,**/obj/**,**/dist/**,**/lib/**</excludes>
+      <timeout>60</timeout>
+      <indicateLanguages>true</indicateLanguages>
+      <languages>abap,actionscript,aspnet,c,cobol,cpp,csharp,go,groovy,html,java,javascript,jcl,jsp,kotlin,natural,objectivec,oracleforms,other,perl,php,plsql,powerscript,python,rpg4,ruby,scala,swift,vb6,vbnet,xml</languages>
+      <measure>QUALITY_INDICATOR</measure>
+      <unstableThreshold>2.0</unstableThreshold>
+      <failureThreshold>1.0</failureThreshold>
+      <applicationName__dm>${JOB_NAME}</applicationName__dm>
+      <label__dm>#${BUILD_NUMBER}</label__dm>
+      <changeRequest__dm></changeRequest__dm>
+      <analysisScope__dm>COMPLETE_DELIVERY</analysisScope__dm>
+      <branch__dm></branch__dm>
+      <changeRequestStatus__dm>RESOLVED</changeRequestStatus__dm>
+      <encoding__dm>UTF-8</encoding__dm>
+      <includes__dm></includes__dm>
+      <excludes__dm>**/src/test/**,**/__MACOSX/**,**/*.min.js,**/*.Designer.vb,**/*.designer.vb,**/*Reference.vb,**/*Service.vb,**/*Silverlight.vb,**/*.Designer.cs,**/*.designer.cs,**/*Reference.cs,**/*Service.cs,**/*Silverlight.cs,**/.*,**/Pods/BuildHeaders/**/*.h,**/Pods/Headers/**/*.h,**/node_modules/**,**/bower_components/**,**/target/**,**/bin/**,**/obj/**,**/dist/**,**/lib/**</excludes__dm>
+      <timeout__dm>60</timeout__dm>
+      <indicateLanguages__dm>false</indicateLanguages__dm>
+      <languages__dm>abap,actionscript,aspnet,c,cobol,cpp,csharp,go,groovy,html,informix,java,javascript,jcl,jsp,kotlin,natural,objectivec,oracleforms,other,perl,php,plsql,powerscript,python,rpg4,ruby,scala,sqlscript,swift,transactsql,vb6,vbnet,xml</languages__dm>
+      <waitForAuditResults__dm>false</waitForAuditResults__dm>
+      <markBuildWhenNoPass__dm>UNSTABLE</markBuildWhenNoPass__dm>
+      <commandArgs__em>-c -n &quot;${JOB_NAME}&quot; -l &quot;#${BUILD_NUMBER}&quot;</commandArgs__em>
+      <extraParameters__em>encoding=&quot;UTF-8&quot; supported.technologies=&quot;abap,actionscript,aspnet,c,cobol,cpp,csharp,go,groovy,html,informix,java,javascript,jcl,jsp,kotlin,natural,objectivec,oracleforms,other,perl,php,plsql,powerscript,python,rpg4,ruby,scala,sqlscript,swift,transactsql,vb6,vbnet,xml&quot; exclude.patterns=&quot;**/src/test/**,**/__MACOSX/**,**/*.min.js,**/*.Designer.vb,**/*.designer.vb,**/*Reference.vb,**/*Service.vb,**/*Silverlight.vb,**/*.Designer.cs,**/*.designer.cs,**/*Reference.cs,**/*Service.cs,**/*Silverlight.cs,**/.*,**/Pods/BuildHeaders/**/*.h,**/Pods/Headers/**/*.h,**/node_modules/**,**/bower_components/**,**/target/**,**/bin/**,**/obj/**,**/dist/**,**/lib/**&quot;</extraParameters__em>
+      <timeout__em>60</timeout__em>
+      <successResultCodes__em>0</successResultCodes__em>
+      <unstableResultCodes__em>10, 13</unstableResultCodes__em>
+      <failureResultCodes__em>1, 11, 12, 14</failureResultCodes__em>
+      <notBuiltResultCodes__em></notBuiltResultCodes__em>
+      <abortedResultCodes__em></abortedResultCodes__em>
+      <markAsInOtherCases__em>FAILURE</markAsInOtherCases__em>
+    </com.kiuwan.plugins.kiuwanJenkinsPlugin.KiuwanRecorder>
+    <hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.82">
+      <recipientList>$DEFAULT_RECIPIENTS</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+          <email>
+            <recipientList>massimo.borgogno@gmail.com</recipientList>
+            <subject>$PROJECT_DEFAULT_SUBJECT</subject>
+            <body>$PROJECT_DEFAULT_CONTENT</body>
+            <recipientProviders/>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.SuccessTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
+      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <postsendScript>$DEFAULT_POSTSEND_SCRIPT</postsendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <from></from>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
+    <hudson.plugins.parameterizedtrigger.BuildTrigger plugin="parameterized-trigger@2.39">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+          </configs>
+          <projects>C50_DownloadRisultati_per_tecnologia</projects>
+          <condition>SUCCESS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+        </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.BuildTrigger>
+  </publishers>
+  <buildWrappers/>
+</project>

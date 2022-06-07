@@ -1,0 +1,237 @@
+jenkins:
+  agentProtocols:
+  - "JNLP4-connect"
+  - "Ping"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  disableRememberMe: false
+  disabledAdministrativeMonitors:
+  - "hudson.diagnosis.ReverseProxySetupMonitor"
+  globalNodeProperties:
+  - envVars:
+      env:
+      - key: "DEFAULT_TAGS_OR_BRANCHES"
+        value: "tags"
+      - key: "JAVA_HOME"
+        value: "/usr/java/jdk1.8.0_144"
+      - key: "KIUWAN_API_PASS"
+        value: "ADora123*"
+      - key: "KIUWAN_API_PASS_X"
+        value: "jZ27p8TpWClL"
+      - key: "KIUWAN_API_USER"
+        value: "avissio"
+      - key: "KIUWAN_API_USER_X"
+        value: "automate"
+      - key: "KIUWAN_PASS"
+        value: "ADora123*"
+      - key: "KIUWAN_USER"
+        value: "avissio"
+      - key: "SVN_PASS"
+        value: "user001"
+      - key: "SVN_USER"
+        value: "user001"
+      - key: "URL_APPLICAZIONI"
+        value: "https://virtserver.swaggerhub.com/ConfigurationMngt/Applicazioni/1.0.1-oas3/applicazioniDaAnalizzare"
+  labelAtoms:
+  - name: "Server_linux"
+  - name: "master"
+  markupFormatter: "plainText"
+  mode: NORMAL
+  noUsageStatistics: true
+  nodeProperties:
+  - envVars:
+      env:
+      - key: "JAVA_HOME"
+        value: "/usr/java/jdk1.8.0_144"
+  nodes:
+  - permanent:
+      labelString: "Server_linux"
+      launcher:
+        ssh:
+          credentialsId: "Borgogno"
+          host: "10.150.1.191"
+          port: 22
+          sshHostKeyVerificationStrategy: "knownHostsFileKeyVerificationStrategy"
+      mode: EXCLUSIVE
+      name: "Server_linux"
+      nodeDescription: "Server Linux che contiene il docker"
+      numExecutors: 2
+      remoteFS: "/var/external"
+      retentionStrategy: "always"
+  numExecutors: 4
+  primaryView:
+    all:
+      name: "all"
+  projectNamingStrategy: "standard"
+  quietPeriod: 5
+  remotingSecurity:
+    enabled: true
+  scmCheckoutRetryCount: 0
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+      - id: "alberto"
+        name: "Albero Vissio"
+        properties:
+        - "apiToken"
+        - colorBlindProperty:
+            enabledColorBlindSupport: false
+        - mailer:
+            emailAddress: "alberto.vissio@raipubblicita.it"
+        - preferredProvider:
+            providerId: "default"
+      - id: "massimo"
+        name: "Massimo Borgogno"
+        properties:
+        - "apiToken"
+        - colorBlindProperty:
+            enabledColorBlindSupport: true
+        - mailer:
+            emailAddress: "massimo.borgogno@assioma.net"
+        - preferredProvider:
+            providerId: "default"
+  slaveAgentPort: 50000
+  updateCenter:
+    sites:
+    - id: "default"
+      url: "https://updates.jenkins.io/update-center.json"
+security:
+  apiToken:
+    creationOfLegacyTokenEnabled: false
+    tokenGenerationOnCreationEnabled: false
+    usageStatisticsEnabled: true
+  sSHD:
+    port: -1
+unclassified:
+  badgePlugin:
+    disableFormatHTML: false
+  buildDiscarders:
+    configuredBuildDiscarders:
+    - "jobBuildDiscarder"
+  buildStepOperation:
+    enabled: false
+  email-ext:
+    adminRequiredForTemplateTesting: false
+    allowUnregisteredEnabled: false
+    charset: "UTF-8"
+    debugMode: false
+    defaultBody: |-
+      $PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+      Check console output at $BUILD_URL to view the results.
+    defaultContentType: "text/plain"
+    defaultSubject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!"
+    defaultTriggerIds:
+    - "hudson.plugins.emailext.plugins.trigger.FailureTrigger"
+    mailAccount:
+      smtpHost: "smtp.google.com"
+      smtpPassword: "{AQAAABAAAAAQCVVa18jwwdwzCtVftFsaqebuiw8O49TQvdoKd8UPqhQ=}"
+      smtpPort: "465"
+      smtpUsername: "massimo.borgogno.assioma@gmail.com"
+      useSsl: true
+    maxAttachmentSize: -1
+    maxAttachmentSizeMb: -1
+    precedenceBulk: false
+    watchingEnabled: false
+  fingerprints:
+    fingerprintCleanupDisabled: false
+    storage: "file"
+  gPSGlobalConfiguration:
+    secureGroovyScript:
+      sandbox: false
+  gitHubConfiguration:
+    apiRateLimitChecker: ThrottleForNormalize
+  gitHubPluginConfig:
+    hookUrl: "http://10.150.1.191:8080/github-webhook/"
+  gitSCM:
+    allowSecondFetch: false
+    createAccountBasedOnEmail: false
+    disableGitToolChooser: false
+    hideCredentials: false
+    showEntireCommitSummaryInChanges: false
+    useExistingAccountWithSameEmail: false
+  groovy:
+    installations:
+    - home: "/var/jenkins_home/groovy-3.0.6"
+      name: "groovy-3.0.4"
+    - home: "/var/jenkins_home/groovy-3.0.6"
+      name: "groovy-3.0.6"
+  junitTestResultStorage:
+    storage: "file"
+  kiuwanGlobalConfigDescriptor:
+    connectionProfiles:
+    - name: "Kiuwan_RaiP"
+      password: "ADora123*"
+      proxyAuthentication: "None"
+      proxyProtocol: "http"
+      username: "avissio"
+      uuid: "ybcm-8Q4N"
+    - name: "KW"
+      proxyAuthentication: "None"
+      proxyProtocol: "http"
+      username: "avissio"
+      uuid: "2akS-jmSB"
+    - name: "Assioma.net"
+      password: "Password$01"
+      proxyAuthentication: "None"
+      proxyProtocol: "http"
+      username: "Assioma - Kiuwan - Account"
+      uuid: "WiQP-bKAI"
+  location:
+    adminAddress: "Indirizzo non ancora configurato <nessuno@danessunaparte>"
+    url: "http://10.150.1.191:8080/"
+  mailer:
+    authentication:
+      password: "{AQAAABAAAAAQxiciMtB6FMzFgEDWJLBGL/l85ywyQa6+8g8End6sT+A=}"
+      username: "massimo.borgogno.assioma@gmail.com"
+    charset: "UTF-8"
+    smtpHost: "smtp.gmail.com"
+    smtpPort: "587"
+    useSsl: false
+    useTls: true
+  mavenModuleSet:
+    localRepository: "default"
+  pollSCM:
+    pollingThreadCount: 10
+  securePostScriptConfiguration:
+    secureGroovyScript:
+      sandbox: false
+  shell:
+    shell: "/bin/bash"
+  simple-theme-plugin:
+    elements:
+    - cssUrl:
+        url: "https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-cyan.css"
+  timestamper:
+    allPipelines: false
+    elapsedTimeFormat: "'<b>'HH:mm:ss.S'</b> '"
+    systemTimeFormat: "'<b>'HH:mm:ss'</b> '"
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          description: "User001"
+          id: "u001"
+          password: "{AQAAABAAAABAqLPlyLBvqSDABLVR8Y/PuxojC4LgQahpF74Y+xF81OM/3zzANpv+ZthSEdjIajvo5NRk2b+8qo/uTi4N9A+6xU6LgoiYvvgpUV7Gx4gygj8=}"
+          scope: GLOBAL
+          username: "user001"
+      - usernamePassword:
+          description: "U01"
+          id: "U01"
+          password: "{AQAAABAAAAAQwO9g/3iIBz9OV6L0WZ2sVCKo8LMeAjq0cr9fu/jj4gA=}"
+          scope: GLOBAL
+          username: "user001"
+      - usernamePassword:
+          description: "Utente di dominio borgogno"
+          id: "Borgogno"
+          password: "{AQAAABAAAAAQ9G4q507UR/cA5dCoOLVsU4K6AcxGzVjABeootHJuZtc=}"
+          scope: GLOBAL
+          username: "borgogno"
+

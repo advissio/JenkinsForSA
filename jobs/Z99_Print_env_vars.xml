@@ -1,0 +1,62 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+      <source class="hudson.plugins.groovy.StringSystemScriptSource">
+        <script plugin="script-security@1.75">
+          <script>import hudson.util.*;
+
+out.println &quot;-&quot; * 80
+
+/**
+ * VARIABLES
+ */
+
+def config = new HashMap()
+def bindings = getBinding()
+config.putAll(bindings.getVariables())
+
+def out = config[&apos;out&apos;]
+
+// specified variables (in Jenkins job)
+
+def thr = Thread.currentThread()
+def build = thr?.executable
+def buildMap = build.getBuildVariables() 
+
+config.putAll(buildMap)
+
+// build/environmental variables
+def envVarsMap = build.parent.builds[0].properties.get(&quot;envVars&quot;)
+
+config.putAll(envVarsMap)
+
+config.keySet().each { key -&gt; 
+  out.println key + &quot;: &quot; + config.get(key) 
+}
+
+out.println &quot;-&quot; * 80
+</script>
+          <sandbox>false</sandbox>
+        </script>
+      </source>
+    </hudson.plugins.groovy.SystemGroovy>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

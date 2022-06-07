@@ -1,0 +1,242 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.82">
+          <name>SOLO_APP</name>
+          <description>Esegue solo gli steps successivi per l&apos;applicazione specificata</description>
+          <quoteValue>false</quoteValue>
+          <saveJSONParameterToFile>false</saveJSONParameterToFile>
+          <visibleItemCount>10</visibleItemCount>
+          <type>PT_SINGLE_SELECT</type>
+          <propertyFile>/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaApp</propertyFile>
+          <propertyKey>sceltaApp</propertyKey>
+          <defaultValue>Tutte le App</defaultValue>
+          <multiSelectDelimiter>,</multiSelectDelimiter>
+          <projectName>B00_LancioAnalisiApplicazioni</projectName>
+        </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ANALISI</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>S</string>
+              <string>N</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.TimerTrigger>
+      <spec>0 1 2 * *</spec>
+    </hudson.triggers.TimerTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>/var/jenkins_home/workspace</customWorkspace>
+  <builders>
+    <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+      <source class="hudson.plugins.groovy.StringSystemScriptSource">
+        <script plugin="script-security@1.75">
+          <script>import groovy.json.JsonSlurper
+import jenkins.model.*
+import hudson.model.*
+
+def ANALISI=build.getEnvironment(listener).get( &apos;ANALISI&apos; ) 
+def SOLO_APP=build.getEnvironment(listener).get( &apos;SOLO_APP&apos; ) 
+if ( SOLO_APP == &quot;Tutte le App&quot; )
+{
+   SOLO_APP=&quot;&quot;
+}
+
+/*
+   triggerBuild
+*/
+def triggerBuild(prm_idApplicazione,prm_descrizioneApp,prm_analisi) {
+    def job = Hudson.instance.getJob(&apos;B10_EsegueAnalisiApplicazione&apos;)
+
+    def params = [
+      new StringParameterValue(&apos;applicationID&apos;, prm_idApplicazione),
+      new StringParameterValue(&apos;descrizioneApp&apos;, prm_descrizioneApp),
+ 
+      new StringParameterValue(&apos;analisi&apos;, prm_analisi),    
+      new StringParameterValue(&apos;LABEL&apos;, &quot;Versione ....&quot;),    
+
+    ]
+    def future = job.scheduleBuild2(0,  new ParametersAction(params))
+  }
+
+
+def JI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.json&quot;)
+
+
+def jsonSlurper = new JsonSlurper()
+
+def result=JI.getText(&apos;UTF-8&apos;)
+
+
+apps=jsonSlurper.parseText(result)
+
+
+def idApplicazione=&quot;&quot;
+def descrizioneApp=&quot;&quot;
+def provider=&quot;&quot;
+def areaApplicativa=&quot;&quot;
+def contestoApplicativo=&quot;&quot;
+def componentiApplicativi=&quot;&quot;
+def referenteApplicativo=&quot;&quot;
+def emailReferenteApplicativo=&quot;&quot;
+
+def FI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaAppSospese&quot;)
+def SOSPESA=&quot;N&quot;
+
+def listaApp=[:]
+apps.each() { record -&gt;
+  
+  idApplicazione=&quot;&quot;
+  descrizioneApp=&quot;&quot;
+  provider=&quot;&quot;
+  areaApplicativa=&quot;&quot;
+  contestoApplicativo=&quot;&quot;
+  componentiApplicativi=&quot;&quot;
+  referenteApplicativo=&quot;&quot;
+  emailReferenteApplicativo=&quot;&quot;
+  
+  record.each() { k,v -&gt;
+    
+    switch(k) {
+      case &quot;idApplicazione&quot;:
+      idApplicazione=v
+
+
+      break
+        case &quot;descrizione&quot;:
+      descrizioneApp=v
+      break
+        case &quot;provider&quot;:
+      provider=v
+      break
+        case &quot;areaApplicativa&quot;:
+      areaApplicativa=v
+      break
+        case &quot;contestoApplicativo&quot;:
+      contestoApplicativo=v
+      break      
+        case &quot;referenteApplicativo&quot;:
+      referenteApplicativo=v
+      break
+        case &quot;emailReferenteApplicativo&quot;:
+      emailReferenteApplicativo=v
+      break
+        case &quot;componentiApplicativi&quot;:
+      componentiApplicativi=v
+      componentiApplicativi.each { elemento -&gt;
+        /*
+idTecnologia.-.-.-.-.-.ORACLEDB
+tipoRepository.-.-.-.-.-.SVN
+ultimoTagoTrunk.-.-.-.-.-.TRUNK
+pathSorgente.-.-.-.-.-.http://devmanager.sipra.it/svn/Supporto_Vendite/&lt;&lt;TTLT&gt;&gt;/oracledb
+descrizione.-.-.-.-.-.Logica di business su database
+dettagliTecnologici.-.-.-.-.-....
+*/
+        def idTecnologia=&quot;&quot;
+        def tipoRepository=&quot;&quot;
+        def ultimoTagoTrunk=&quot;&quot;
+        def pathSorgente=&quot;&quot;
+        def descrizione=&quot;&quot;
+        def dettagliTecnologici=&quot;&quot;
+        elemento.each() { key, value -&gt;
+          switch(key) {
+            case &quot;idTecnologia&quot;:
+            idTecnologia=value
+            SOSPESA=&quot;N&quot;
+            FI.eachLine() {
+               campi=it.split(&quot;,&quot;)
+
+               if ( idApplicazione.trim() == campi[0].trim() &amp;&amp;  idTecnologia.trim() == campi[1].trim() )
+               {
+
+                  if ( campi[2].trim() != &quot;Abilitata&quot; )
+                  {
+                     SOSPESA=&quot;S&quot;
+                  }
+               }
+            }
+            break
+            case &quot;tipoRepository&quot;:
+            tipoRepository=value
+            break
+              case &quot;ultimoTagoTrunk&quot;:
+            ultimoTagoTrunk=value
+            break
+              case &quot;pathSorgente&quot;:
+            pathSorgente=value
+            break
+              case &quot;descrizione&quot;:
+            descrizione=value
+            break
+              case &quot;dettagliTecnologici&quot;:
+            dettagliTecnologici=value
+            break
+              default:
+              break
+              }
+       
+        }
+        if  ( SOLO_APP == &quot;&quot; || SOLO_APP == idApplicazione )
+         {
+           if ( SOSPESA != &quot;S&quot; )
+           {   
+ 
+               result=listaApp.get(idApplicazione)
+               if (  ! result   )
+               {
+                   stringaParametri=descrizioneApp
+                   listaApp.put(idApplicazione,stringaParametri)
+               }
+            }
+
+         }
+      }
+
+      break
+        default:
+        println k + &quot; non previsto &quot;
+      break
+        }
+   
+  }
+  
+
+}
+
+listaApp.each() { k,v -&gt;
+idApplicazione=k
+descrizioneApp=v
+println &quot;Lanciato job B10_EsegueAnalisiApplicazione con parametri &quot;+idApplicazione+&quot; &quot;+descrizioneApp+&quot; &quot;+ANALISI
+
+triggerBuild(idApplicazione,descrizioneApp,ANALISI)
+}
+return 0</script>
+          <sandbox>false</sandbox>
+        </script>
+      </source>
+    </hudson.plugins.groovy.SystemGroovy>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

@@ -1,0 +1,304 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.82">
+          <name>SOLO_APP</name>
+          <description>Esegue solo gli steps successivi per l&apos;applicazione specificata</description>
+          <quoteValue>false</quoteValue>
+          <saveJSONParameterToFile>false</saveJSONParameterToFile>
+          <visibleItemCount>10</visibleItemCount>
+          <type>PT_SINGLE_SELECT</type>
+          <propertyFile>/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaApp</propertyFile>
+          <propertyKey>sceltaApp</propertyKey>
+          <multiSelectDelimiter>,</multiSelectDelimiter>
+          <projectName>A00_SubmitDownloadSorgenti</projectName>
+        </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
+        <hudson.model.ChoiceParameterDefinition>
+          <name>ANALISI</name>
+          <description></description>
+          <choices class="java.util.Arrays$ArrayList">
+            <a class="string-array">
+              <string>S</string>
+              <string>N</string>
+            </a>
+          </choices>
+        </hudson.model.ChoiceParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>/var/jenkins_home/workspace</customWorkspace>
+  <builders>
+    <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+      <source class="hudson.plugins.groovy.StringSystemScriptSource">
+        <script plugin="script-security@1.75">
+          <script>import groovy.json.JsonSlurper
+import jenkins.model.*
+import hudson.model.*
+
+def ANALISI=build.getEnvironment(listener).get( &apos;ANALISI&apos; ) 
+def SOLO_APP=build.getEnvironment(listener).get( &apos;SOLO_APP&apos; ) 
+WORKSPACE=build.getEnvironment(listener).get(&apos;WORKSPACE&apos;)
+println &quot;WORKSPACE=&quot;+WORKSPACE+&quot;&lt;&lt;&lt;&quot;
+if ( SOLO_APP == &quot;Tutte le App&quot; )
+{
+   SOLO_APP=&quot;&quot;
+}
+
+  def triggerBuild(prm_idApplicazione,prm_idTecnologia,prm_tipoRepository,prm_ultimoTagoTrunk,prm_pathSorgente,prm_descrizioneApp,prm_descrizione,prm_dettagliTecnologici,prm_analisi) {
+    def job = Hudson.instance.getJob(&apos;A10_Ctrl_params_scarico&apos;)
+
+    def params = [
+      new StringParameterValue(&apos;applicationID&apos;, prm_idApplicazione),
+      new StringParameterValue(&apos;idTecnologia&apos;, prm_idTecnologia),
+      new StringParameterValue(&apos;tipoRepository&apos;, prm_tipoRepository),
+      new StringParameterValue(&apos;ultimoTagoTrunk&apos;, prm_ultimoTagoTrunk),
+      new StringParameterValue(&apos;pathSorgente&apos;, prm_pathSorgente),
+      new StringParameterValue(&apos;descrizioneApp&apos;, prm_descrizioneApp),
+      new StringParameterValue(&apos;descrizione&apos;, prm_descrizione),
+      new StringParameterValue(&apos;dettagliTecnologici&apos;, prm_dettagliTecnologici),          
+      new StringParameterValue(&apos;analisi&apos;, prm_analisi),    
+
+    ]
+    def future = job.scheduleBuild2(0,  new ParametersAction(params))
+  }
+
+
+def JI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.json&quot;)
+
+
+def jsonSlurper = new JsonSlurper()
+
+def result=JI.getText(&apos;UTF-8&apos;)
+
+
+apps=jsonSlurper.parseText(result)
+
+
+def idApplicazione=&quot;&quot;
+def descrizioneApp=&quot;&quot;
+def provider=&quot;&quot;
+def areaApplicativa=&quot;&quot;
+def contestoApplicativo=&quot;&quot;
+def componentiApplicativi=&quot;&quot;
+def referenteApplicativo=&quot;&quot;
+def emailReferenteApplicativo=&quot;&quot;
+
+def FI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaAppSospese&quot;)
+def SOSPESA=&quot;N&quot;
+def progressivo=0
+
+apps.each() { record -&gt;
+  
+  idApplicazione=&quot;&quot;
+  descrizioneApp=&quot;&quot;
+  provider=&quot;&quot;
+  areaApplicativa=&quot;&quot;
+  contestoApplicativo=&quot;&quot;
+  componentiApplicativi=&quot;&quot;
+  referenteApplicativo=&quot;&quot;
+  emailReferenteApplicativo=&quot;&quot;
+  
+  record.each() { k,v -&gt;
+    
+    switch(k) {
+      case &quot;idApplicazione&quot;:
+      idApplicazione=v
+
+
+      break
+        case &quot;descrizione&quot;:
+      descrizioneApp=v
+      break
+        case &quot;provider&quot;:
+      provider=v
+      break
+        case &quot;areaApplicativa&quot;:
+      areaApplicativa=v
+      break
+        case &quot;contestoApplicativo&quot;:
+      contestoApplicativo=v
+      break      
+        case &quot;referenteApplicativo&quot;:
+      referenteApplicativo=v
+      break
+        case &quot;emailReferenteApplicativo&quot;:
+      emailReferenteApplicativo=v
+      break
+        case &quot;componentiApplicativi&quot;:
+      componentiApplicativi=v
+      componentiApplicativi.each { elemento -&gt;
+        /*
+idTecnologia.-.-.-.-.-.ORACLEDB
+tipoRepository.-.-.-.-.-.SVN
+ultimoTagoTrunk.-.-.-.-.-.TRUNK
+pathSorgente.-.-.-.-.-.http://devmanager.sipra.it/svn/Supporto_Vendite/&lt;&lt;TTLT&gt;&gt;/oracledb
+descrizione.-.-.-.-.-.Logica di business su database
+dettagliTecnologici.-.-.-.-.-....
+*/
+        def idTecnologia=&quot;&quot;
+        def tipoRepository=&quot;&quot;
+        def ultimoTagoTrunk=&quot;&quot;
+        def pathSorgente=&quot;&quot;
+        def descrizione=&quot;&quot;
+        def dettagliTecnologici=&quot;...&quot;
+        elemento.each() { key, value -&gt;
+          switch(key) {
+            case &quot;idTecnologia&quot;:
+            idTecnologia=value
+            SOSPESA=&quot;N&quot;
+            FI.eachLine() {
+               campi=it.split(&quot;,&quot;)
+
+               if ( idApplicazione.trim() == campi[0].trim() &amp;&amp;  idTecnologia.trim() == campi[1].trim() )
+               {
+
+                  if ( campi[2].trim() != &quot;Abilitata&quot; )
+                  {
+                     SOSPESA=&quot;S&quot;
+                  }
+               }
+            }
+            break
+            case &quot;tipoRepository&quot;:
+            tipoRepository=value
+            break
+              case &quot;ultimoTagoTrunk&quot;:
+            ultimoTagoTrunk=value
+            break
+              case &quot;pathSorgente&quot;:
+            pathSorgente=value
+            break
+              case &quot;descrizione&quot;:
+            descrizione=value
+            break
+              case &quot;dettagliTecnologici&quot;:
+            dettagliTecnologici=value
+            break
+              default:
+              break
+              }
+       
+        }
+        def newURL=pathSorgente
+        if  ( SOLO_APP == &quot;&quot; || SOLO_APP == idApplicazione )
+         {
+           if ( SOSPESA != &quot;S&quot; )
+           {   
+              if ( tipoRepository == &quot;FILESYSTEM&quot; )
+              {
+              //
+              // Normalizzazione del PATH sorgente
+              //
+              // Da                \\nastorp\sipra\prod\cn\fmb
+              // A                   /var/external/local_NAS_fake/cn/fmb
+              //
+              pt=pathSorgente.replace(&apos;\\&apos;,&apos;/&apos;)
+              println &quot;Da &quot;+pathSorgente+&quot; --&gt; &quot;+pt
+              newURL=pt.replace(&quot;//&quot;,&quot;/&quot;).replace(&apos;nastorp&apos;,&apos;var&apos;).replace(&apos;sipra&apos;,&apos;external&apos;).replace(&apos;prod&apos;,&apos;local_NAS_fake&apos;)
+              println &quot;Da &quot;+pt+&quot; --&gt; &quot;+newURL
+            }
+
+progressivo++
+nomeFile=WORKSPACE+&quot;/A00_Ctrl_params_&quot;+progressivo+&quot;.properties&quot;
+println &quot;predispongo &quot;+nomeFile
+ def FO=new File(nomeFile)
+FO.write(&quot;applicationID=&quot;+idApplicazione+&quot;\n&quot;)
+FO.append(&quot;idTecnologia=&quot;+idTecnologia+&quot;\n&quot;)
+FO.append(&quot;tipoRepository=&quot;+tipoRepository+&quot;\n&quot;)
+FO.append(&quot;ultimoTagoTrunk=&quot;+ultimoTagoTrunk+&quot;\n&quot;)
+FO.append(&quot;pathSorgente=&quot;+newURL+&quot;\n&quot;)
+FO.append(&quot;descrizioneApp=&quot;+descrizioneApp+&quot;\n&quot;)
+FO.append(&quot;descrizione=&quot;+descrizione+&quot;\n&quot;)
+FO.append(&quot;dettagliTecnologici=&quot;+dettagliTecnologici+&quot;\n&quot;)
+FO.append(&quot;analisi=&quot;+ANALISI+&quot;\n&quot;)
+//println &quot;Lanciato job A10_Ctrl_params_scarico con parametri &quot;+idApplicazione+ &quot; &quot;+idTecnologia+ &quot; &quot;+tipoRepository+ &quot; &quot;+ultimoTagoTrunk+ &quot; &quot;+pathSorgente+ &quot; &quot;+descrizioneApp+ &quot; &quot;+descrizione+ &quot; &quot;+dettagliTecnologici+&quot; &quot;+ANALISI
+
+//triggerBuild(idApplicazione,idTecnologia,tipoRepository,ultimoTagoTrunk,pathSorgente,descrizioneApp,descrizione,dettagliTecnologici,ANALISI)
+
+
+            }
+            else
+            {
+               println &quot;L&apos;applicazione &quot;+idApplicazione+&quot; per la tecnologia &quot;+idTecnologia+&quot; avrebbe dovuto essere analizzata ma risulta SOSPESA&quot;
+            }
+         }
+      }
+
+      break
+        default:
+        println k + &quot; non previsto &quot;
+      break
+        }
+   
+  }
+  
+
+}
+return 0</script>
+          <sandbox>false</sandbox>
+        </script>
+      </source>
+    </hudson.plugins.groovy.SystemGroovy>
+    <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.39">
+      <configs>
+        <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+          <configs class="empty-list"/>
+          <configFactories>
+            <hudson.plugins.parameterizedtrigger.FileBuildParameterFactory>
+              <filePattern>A00_Ctrl_params_*.properties</filePattern>
+              <noFilesFoundAction>SKIP</noFilesFoundAction>
+            </hudson.plugins.parameterizedtrigger.FileBuildParameterFactory>
+          </configFactories>
+          <projects>A10_Ctrl_params_scarico</projects>
+          <condition>ALWAYS</condition>
+          <triggerWithNoParameters>false</triggerWithNoParameters>
+          <triggerFromChildProjects>false</triggerFromChildProjects>
+          <block>
+            <buildStepFailureThreshold>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </buildStepFailureThreshold>
+            <unstableThreshold>
+              <name>UNSTABLE</name>
+              <ordinal>1</ordinal>
+              <color>YELLOW</color>
+              <completeBuild>true</completeBuild>
+            </unstableThreshold>
+            <failureThreshold>
+              <name>FAILURE</name>
+              <ordinal>2</ordinal>
+              <color>RED</color>
+              <completeBuild>true</completeBuild>
+            </failureThreshold>
+          </block>
+          <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+        </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+      </configs>
+    </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+    <hudson.tasks.Shell>
+      <command>rm -rf A00_Ctrl_params_*.properties
+ls -la</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

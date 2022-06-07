@@ -1,0 +1,209 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>applicationID</name>
+          <description>Nome dell&apos;appplicazione come da catalogo Rai Pubblicità</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>idTecnologia</name>
+          <description>Tecnologia di sviluppo del modulo, serve come sottodirectory di scarico dei sorgenti</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>pathSorgente</name>
+          <description>Path da dove copiare i sorgenti</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>descrizioneApp</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>analisi</name>
+          <description>Analisi S/N</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>/var/external/local_FS_repo</customWorkspace>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>echo &quot;++++++++++++++++++++++++++++++++++++&quot;
+# env
+echo &quot;++++++++++++++++++++++++++++++++++++&quot;
+pwd
+mkdir -p ./${applicationID}/${idTecnologia}
+chmod  777 ./${applicationID}
+chmod 777 ./${applicationID}/${idTecnologia}
+
+cd /var/external/local_FS_repo/${applicationID}/${idTecnologia}
+
+tar  -C ${pathSorgente} -cvf - . | tar -xvf -
+
+chmod 777 .
+chmod -R 777 *
+
+
+</command>
+      <configuredLocalRules/>
+    </hudson.tasks.Shell>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.4.0">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
+        <arg1>$idTecnologia</arg1>
+        <arg2>ORACLEFORMS</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.39">
+          <configs>
+            <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+              <configs>
+                <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+              </configs>
+              <projects>A35_Converte_oracleForms</projects>
+              <condition>ALWAYS</condition>
+              <triggerWithNoParameters>false</triggerWithNoParameters>
+              <triggerFromChildProjects>false</triggerFromChildProjects>
+              <block>
+                <buildStepFailureThreshold>
+                  <name>FAILURE</name>
+                  <ordinal>2</ordinal>
+                  <color>RED</color>
+                  <completeBuild>true</completeBuild>
+                </buildStepFailureThreshold>
+                <unstableThreshold>
+                  <name>UNSTABLE</name>
+                  <ordinal>1</ordinal>
+                  <color>YELLOW</color>
+                  <completeBuild>true</completeBuild>
+                </unstableThreshold>
+                <failureThreshold>
+                  <name>FAILURE</name>
+                  <ordinal>2</ordinal>
+                  <color>RED</color>
+                  <completeBuild>true</completeBuild>
+                </failureThreshold>
+              </block>
+              <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+            </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+          </configs>
+        </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+        <hudson.plugins.parameterizedtrigger.TriggerBuilder plugin="parameterized-trigger@2.39">
+          <configs>
+            <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+              <configs>
+                <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                  <properties>applicationID=${applicationID}
+idTecnologia=${idTecnologia}</properties>
+                  <textParamValueOnNewLine>false</textParamValueOnNewLine>
+                </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+              </configs>
+              <projects>A37_Normalizza_FS</projects>
+              <condition>ALWAYS</condition>
+              <triggerWithNoParameters>false</triggerWithNoParameters>
+              <triggerFromChildProjects>false</triggerFromChildProjects>
+              <block>
+                <buildStepFailureThreshold>
+                  <name>FAILURE</name>
+                  <ordinal>2</ordinal>
+                  <color>RED</color>
+                  <completeBuild>true</completeBuild>
+                </buildStepFailureThreshold>
+                <unstableThreshold>
+                  <name>UNSTABLE</name>
+                  <ordinal>1</ordinal>
+                  <color>YELLOW</color>
+                  <completeBuild>true</completeBuild>
+                </unstableThreshold>
+                <failureThreshold>
+                  <name>FAILURE</name>
+                  <ordinal>2</ordinal>
+                  <color>RED</color>
+                  <completeBuild>true</completeBuild>
+                </failureThreshold>
+              </block>
+              <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+            </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+          </configs>
+        </hudson.plugins.parameterizedtrigger.TriggerBuilder>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.4.0">
+      <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
+        <arg1>${analisi}</arg1>
+        <arg2>S</arg2>
+        <ignoreCase>false</ignoreCase>
+      </condition>
+      <buildStep class="hudson.plugins.parameterizedtrigger.TriggerBuilder" plugin="parameterized-trigger@2.39">
+        <configs>
+          <hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+            <configs>
+              <hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+                <properties>applicationID${applicationID}
+idTecnologia=${idTecnologia}
+pathSorgente=${pathSorgente}
+LABEL=${BUILD_NUMBER}
+descrizioneApp=${descrizioneApp}
+analisi=${analisi}</properties>
+                <textParamValueOnNewLine>false</textParamValueOnNewLine>
+              </hudson.plugins.parameterizedtrigger.PredefinedBuildParameters>
+            </configs>
+            <projects>C00_EsegueAnalisiTecnologia</projects>
+            <condition>ALWAYS</condition>
+            <triggerWithNoParameters>false</triggerWithNoParameters>
+            <triggerFromChildProjects>false</triggerFromChildProjects>
+            <buildAllNodesWithLabel>false</buildAllNodesWithLabel>
+          </hudson.plugins.parameterizedtrigger.BlockableBuildTriggerConfig>
+        </configs>
+      </buildStep>
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+    </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder plugin="conditional-buildstep@1.4.0">
+      <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.3">
+        <arg1>${analisi}</arg1>
+        <arg2>N</arg2>
+        <ignoreCase>false</ignoreCase>
+      </condition>
+      <buildStep class="hudson.plugins.groovy.SystemGroovy" plugin="groovy@2.3">
+        <source class="hudson.plugins.groovy.StringSystemScriptSource">
+          <script plugin="script-security@1.75">
+            <script>println (&quot;--------------------------------------------------------------------&quot;)
+println (&quot;Analisi statica NON eseguita come richiesta via parametri&quot;)
+println (&quot;--------------------------------------------------------------------&quot;)
+</script>
+            <sandbox>false</sandbox>
+          </script>
+        </source>
+      </buildStep>
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.3"/>
+    </org.jenkinsci.plugins.conditionalbuildstep.singlestep.SingleConditionalBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

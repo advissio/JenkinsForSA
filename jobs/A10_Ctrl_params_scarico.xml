@@ -1,0 +1,459 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>applicationID</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>idTecnologia</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>tipoRepository</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>ultimoTagoTrunk</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>pathSorgente</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>descrizioneApp</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>descrizione</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>dettagliTecnologici</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>analisi</name>
+          <description>analisi S/N</description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.32">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>100</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+      <source class="hudson.plugins.groovy.StringSystemScriptSource">
+        <script plugin="script-security@1.76">
+          <script>def applicationID = build.getEnvironment(listener).get( &apos;applicationID&apos; ) 
+def idTecnologia = build.getEnvironment(listener).get( &apos;idTecnologia&apos; ) 
+def tipoRepository = build.getEnvironment(listener).get( &apos;tipoRepository&apos; ) 
+def ultimoTagoTrunk = build.getEnvironment(listener).get( &apos;ultimoTagoTrunk&apos; ) 
+def pathSorgente = build.getEnvironment(listener).get( &apos;pathSorgente&apos; ) 
+def descrizione = build.getEnvironment(listener).get( &apos;descrizione&apos; ) 
+def descrizioneApp = build.getEnvironment(listener).get( &apos;descrizioneApp&apos; ) 
+def dettagliTecnologici = build.getEnvironment(listener).get( &apos;dettagliTecnologici&apos; ) 
+def analisi = build.getEnvironment(listener).get( &apos;analisi&apos; ) 
+println &quot;---&quot;+applicationID
+println &quot;---&quot;+idTecnologia 
+println &quot;---&quot;+tipoRepository 
+println &quot;---&quot;+ultimoTagoTrunk
+println &quot;---&quot;+pathSorgente 
+println &quot;---&quot;+descrizioneApp 
+println &quot;---&quot;+descrizione 
+println &quot;---&quot;+dettagliTecnologici 
+println &quot;---&quot;+analisi
+</script>
+          <sandbox>false</sandbox>
+        </script>
+      </source>
+    </hudson.plugins.groovy.SystemGroovy>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.4.1">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Run" plugin="run-condition@1.5"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.logic.And" plugin="run-condition@1.5">
+        <conditions>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition">
+              <arg1>${tipoRepository}</arg1>
+              <arg2>SVN</arg2>
+              <ignoreCase>false</ignoreCase>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition">
+              <arg1>${ultimoTagoTrunk}</arg1>
+              <arg2>TRUNK</arg2>
+              <ignoreCase>true</ignoreCase>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+        </conditions>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+          <source class="hudson.plugins.groovy.StringSystemScriptSource">
+            <script plugin="script-security@1.76">
+              <script>import jenkins.model.*
+import hudson.model.*
+
+def applicationID = build.getEnvironment(listener).get( &apos;applicationID&apos; ) 
+def idTecnologia = build.getEnvironment(listener).get( &apos;idTecnologia&apos; ) 
+def tipoRepository = build.getEnvironment(listener).get( &apos;tipoRepository&apos; ) 
+def ultimoTagoTrunk = build.getEnvironment(listener).get( &apos;ultimoTagoTrunk&apos; ) 
+def pathSorgente = build.getEnvironment(listener).get( &apos;pathSorgente&apos; ) 
+def descrizioneApp = build.getEnvironment(listener).get( &apos;descrizioneApp&apos; ) 
+def descrizione = build.getEnvironment(listener).get( &apos;descrizione&apos; ) 
+def dettagliTecnologici = build.getEnvironment(listener).get( &apos;dettagliTecnologici&apos; ) 
+
+def analisi= build.getEnvironment(listener).get( &apos;analisi&apos; ) 
+
+def URL = pathSorgente.replace(&apos;&lt;&lt;TTLT&gt;&gt;&apos;,&apos;trunk&apos;)
+println URL
+
+
+def job = Hudson.instance.getJob(&apos;A40_SVN_download_trunk&apos;)
+    
+    def params = [
+      new StringParameterValue(&apos;applicationID&apos;, applicationID ),
+      new StringParameterValue(&apos;idTecnologia&apos;, idTecnologia),
+      new StringParameterValue(&apos;pathSorgente&apos;, URL),    
+      new StringParameterValue(&apos;descrizioneApp&apos;, descrizioneApp),    
+      new StringParameterValue(&apos;analisi&apos;, analisi),    
+    ]
+    def future = job.scheduleBuild2(0,  new ParametersAction(params))
+
+println &quot;Lanciato job A40_SVN_download_trunk per applicazione &quot;+applicationID +&quot; Tecnologia &quot;+idTecnologia+&quot; descrizioneApp &quot;+descrizioneApp+&quot; analisi &quot;+analisi</script>
+              <sandbox>false</sandbox>
+            </script>
+          </source>
+        </hudson.plugins.groovy.SystemGroovy>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.4.1">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.5"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition" plugin="run-condition@1.5">
+        <arg1>${tipoRepository}</arg1>
+        <arg2>FILESYSTEM</arg2>
+        <ignoreCase>false</ignoreCase>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+          <source class="hudson.plugins.groovy.StringSystemScriptSource">
+            <script plugin="script-security@1.76">
+              <script>import jenkins.model.*
+import hudson.model.*
+
+def applicationID = build.getEnvironment(listener).get( &apos;applicationID&apos; ) 
+def idTecnologia = build.getEnvironment(listener).get( &apos;idTecnologia&apos; ) 
+def tipoRepository = build.getEnvironment(listener).get( &apos;tipoRepository&apos; ) 
+def ultimoTagoTrunk = build.getEnvironment(listener).get( &apos;ultimoTagoTrunk&apos; ) 
+def pathSorgente = build.getEnvironment(listener).get( &apos;pathSorgente&apos; ) 
+def descrizione = build.getEnvironment(listener).get( &apos;descrizione&apos; ) 
+def descrizioneApp = build.getEnvironment(listener).get( &apos;descrizioneApp&apos; ) 
+def dettagliTecnologici = build.getEnvironment(listener).get( &apos;dettagliTecnologici&apos; ) 
+def analisi= build.getEnvironment(listener).get( &apos;analisi&apos; ) 
+
+
+
+
+
+
+def job = Hudson.instance.getJob(&apos;A30_FS_copy_trunk&apos;)
+    
+    def params = [
+      new StringParameterValue(&apos;applicationID&apos;, applicationID ),
+      new StringParameterValue(&apos;idTecnologia&apos;, idTecnologia),
+      new StringParameterValue(&apos;pathSorgente&apos;, pathSorgente ),    
+      new StringParameterValue(&apos;descrizioneApp&apos;, descrizioneApp),    
+      new StringParameterValue(&apos;analisi&apos;, analisi),    
+
+    ]
+    def future = job.scheduleBuild2(0,  new ParametersAction(params))
+
+println &quot;Lanciato job FS_copy_trunk per applicazione &quot;+applicationID +&quot; Tecnologia &quot;+idTecnologia</script>
+              <sandbox>false</sandbox>
+            </script>
+          </source>
+        </hudson.plugins.groovy.SystemGroovy>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+    <org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder plugin="conditional-buildstep@1.4.1">
+      <runner class="org.jenkins_ci.plugins.run_condition.BuildStepRunner$Fail" plugin="run-condition@1.5"/>
+      <runCondition class="org.jenkins_ci.plugins.run_condition.logic.And" plugin="run-condition@1.5">
+        <conditions>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition">
+              <arg1>${tipoRepository}</arg1>
+              <arg2>SVN</arg2>
+              <ignoreCase>false</ignoreCase>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+          <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+            <condition class="org.jenkins_ci.plugins.run_condition.logic.Or">
+              <conditions>
+                <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+                  <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition">
+                    <arg1>${ultimoTagoTrunk}</arg1>
+                    <arg2>TAG</arg2>
+                    <ignoreCase>false</ignoreCase>
+                  </condition>
+                </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+                <org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+                  <condition class="org.jenkins_ci.plugins.run_condition.core.StringsMatchCondition">
+                    <arg1>${ultimoTagoTrunk}</arg1>
+                    <arg2>ULTIMOTAG</arg2>
+                    <ignoreCase>false</ignoreCase>
+                  </condition>
+                </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+              </conditions>
+            </condition>
+          </org.jenkins__ci.plugins.run__condition.logic.ConditionContainer>
+        </conditions>
+      </runCondition>
+      <conditionalbuilders>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+          <source class="hudson.plugins.groovy.StringSystemScriptSource">
+            <script plugin="script-security@1.76">
+              <script>import jenkins.model.*
+import hudson.model.*
+import hudson.util.*;
+
+out.println &quot;-&quot; * 80
+
+/**
+ * VARIABLES
+ */
+
+def config = new HashMap()
+def bindings = getBinding()
+config.putAll(bindings.getVariables())
+
+def out = config[&apos;out&apos;]
+
+// specified variables (in Jenkins job)
+
+def thr = Thread.currentThread()
+def build = thr?.executable
+def buildMap = build.getBuildVariables() 
+
+config.putAll(buildMap)
+
+// build/environmental variables
+def envVarsMap = build.parent.builds[0].properties.get(&quot;envVars&quot;)
+
+config.putAll(envVarsMap)
+/*
+config.keySet().each { key -&gt; 
+  out.println key + &quot;: &quot; + config.get(key) 
+}
+*/
+out.println &quot;-&quot; * 80
+def BUILD_ID= config.get(&apos;BUILD_ID&apos;)
+def WORKSPACE= config.get(&apos;WORKSPACE&apos;)
+def TAGS_BRANCHES= config.get(&apos;DEFAULT_TAGS_OR_BRANCHES&apos;)
+
+nodes = Jenkins.instance.globalNodeProperties
+nodes.getAll(hudson.slaves.EnvironmentVariablesNodeProperty.class)
+envVars = nodes[0].envVars
+//def TAGS_BRANCHES=envVars[&apos;DEFAULT_TAGS_OR_BRANCHES&apos;]
+
+println envVars
+println &quot;Si lavora con : &quot;+TAGS_BRANCHES
+println &quot;Build_NUMBER  : &quot;+BUILD_ID
+
+def applicationID = build.getEnvironment(listener).get( &apos;applicationID&apos; ) 
+def idTecnologia = build.getEnvironment(listener).get( &apos;idTecnologia&apos; ) 
+def tipoRepository = build.getEnvironment(listener).get( &apos;tipoRepository&apos; ) 
+def ultimoTagoTrunk = build.getEnvironment(listener).get( &apos;ultimoTagoTrunk&apos; ) 
+def pathSorgente = build.getEnvironment(listener).get( &apos;pathSorgente&apos; ) 
+
+def descrizioneApp= build.getEnvironment(listener).get( &apos;descrizioneApp&apos; ) 
+def descrizione = build.getEnvironment(listener).get( &apos;descrizione&apos; ) 
+def dettagliTecnologici = build.getEnvironment(listener).get( &apos;dettagliTecnologici&apos; ) 
+def analisi = build.getEnvironment(listener).get( &apos;analisi&apos; ) 
+
+tmp_url=pathSorgente.split(&quot;&lt;&quot;)
+def baseURL = pathSorgente.replace(&apos;&lt;&lt;TTLT&gt;&gt;&apos;,&apos;tags&apos;)
+def URL = tmp_url[0]+&quot;tags&quot;
+println &quot;La URL di SVN da usare è :&quot;+URL
+
+def parms=new File(WORKSPACE+&quot;/prm_&quot;+BUILD_ID+&quot;.txt&quot;)
+parms.write(&quot;URL=&quot;+URL+&quot;\n&quot;)
+parms.append(&quot;applicationID=&quot;+applicationID +&quot;\n&quot;)
+parms.append(&quot;idTecnologia=&quot;+idTecnologia +&quot;\n&quot;)
+parms.append(&quot;descrizioneApp=&quot;+descrizioneApp+&quot;\n&quot;)
+//parms.append(&quot;descrizione=&quot;+descrizione.encode()+&quot;\n&quot;)
+parms.append(&quot;descrizione=&quot;+java.net.URLEncoder.encode(descrizione, &quot;UTF-8&quot;)+&quot;\n&quot;)
+parms.append(&quot;pathSorgente=&quot;+pathSorgente+&quot;\n&quot;)
+parms.append(&quot;TAGS_BRANCHES=&quot;+TAGS_BRANCHES+&quot;\n&quot;)
+parms.append(&quot;baseURL=&quot;+baseURL+&quot;\n&quot;)
+parms.append(&quot;analisi=&quot;+analisi+&quot;\n&quot;)
+</script>
+              <sandbox>false</sandbox>
+            </script>
+          </source>
+        </hudson.plugins.groovy.SystemGroovy>
+        <hudson.tasks.Shell>
+          <command>set +x
+FileName=&quot;${WORKSPACE}/prm_${BUILD_ID}.txt&quot;
+echo &quot;---- export variabili da file ${WORKSPACE}/prm_${BUILD_ID}.txt ----&quot;
+export $(cat $FileName | xargs) &gt; /dev/null
+echo &quot;---- export terminata ---&quot;
+echo &quot;-------------------------------------------------- 1 --------------------------------------------------&quot;
+echo &quot;-- Esecuzione svn per recupero Tag piu&apos; recente ---&quot;
+svn --non-interactive --no-auth-cache --username $SVN_USER --password $SVN_PASS ls --xml $URL &gt; ${WORKSPACE}/prm_${TAGS_BRANCHES}_${BUILD_ID}.xml 
+echo &quot;-- Esecuzione svn terminata ---&quot;
+echo &quot;-------------------------------------------------- 2 -------------------------------------------------&quot;
+cat ${WORKSPACE}/prm_${TAGS_BRANCHES}_${BUILD_ID}.xml
+echo &quot;tagsXml=${WORKSPACE}/prm_${TAGS_BRANCHES}_${BUILD_ID}.xml&quot; &gt;&gt; ${WORKSPACE}/prm_${BUILD_ID}.txt
+echo &quot;--------------------------------------------------- 3 -------------------------------------------------&quot;
+cat ${WORKSPACE}/prm_${BUILD_ID}.txt
+echo &quot;--------------------------------------------------- 4 -------------------------------------------------&quot;
+</command>
+          <configuredLocalRules/>
+        </hudson.tasks.Shell>
+        <hudson.plugins.groovy.SystemGroovy plugin="groovy@2.3">
+          <source class="hudson.plugins.groovy.StringSystemScriptSource">
+            <script plugin="script-security@1.76">
+              <script>import groovy.util.XmlSlurper
+import hudson.model.StringParameterValue
+import hudson.util.*
+import jenkins.model.*
+import hudson.model.*
+
+def config = new HashMap()
+def bindings = getBinding()
+config.putAll(bindings.getVariables())
+def out = config[&apos;out&apos;]
+// specified variables (in Jenkins job)
+def thr = Thread.currentThread()
+def build = thr?.executable
+def buildMap = build.getBuildVariables()
+config.putAll(buildMap)
+// build/environmental variables
+def envVarsMap = build.parent.builds[0].properties.get(&quot;envVars&quot;)
+
+config.putAll(envVarsMap)
+
+out.println &quot;-&quot; * 80
+def BUILD_ID = config.get(&apos;BUILD_ID&apos;)
+def WORKSPACE = config.get(&apos;WORKSPACE&apos;)
+def TAGS_BRANCHES = config.get(&apos;DEFAULT_TAGS_OR_BRANCHES&apos;)
+
+def parametri = [: ]
+def parms = new File(WORKSPACE + &quot;/prm_&quot; + BUILD_ID + &quot;.txt&quot;)
+parms.eachLine() {     line -&gt;
+        r = line.split(&quot;=&quot;)
+    parametri.put(r[0], r[1])
+}
+parametri.each() {     k,  v -&gt;
+    println &quot;k:&quot; + k + &quot;......v:&quot; + v
+}
+
+
+
+def tagsXml = new File(parametri[&apos;tagsXml&apos;])
+
+def contenuto = tagsXml.text
+def rootNode = new XmlSlurper().parseText(contenuto)
+def nomeScelto = &quot;&quot;
+def dataScelta = Date.parse(&quot;yyyy-MM-dd hh:mm:ss&quot;, &quot;1900-01-01 00:00:00&quot;)
+rootNode.list.entry.each() {  lista -&gt;
+        name = lista[&apos;name&apos;]
+    def data = Date.parse(&quot;yyyy-MM-dd hh:mm:ss&quot;, &quot;1900-01-01 00:00:00&quot;)
+    lista.commit[0].each() {   commits -&gt;
+            println &quot;+&quot; * 80
+        println commits[&apos;author&apos;]
+        println name.toString()
+        d = commits[&apos;date&apos;].toString()
+        println &quot;+&quot; * 80
+        n = d.indexOf(&quot;.&quot;)
+   
+        def dt = d[0..18].replace(&quot;T&quot;, &quot; &quot;)
+        println dt
+
+        Date dataLetta = Date.parse(&quot;yyyy-MM-dd hh:mm:ss&quot;, dt)
+        println dataLetta
+        println &quot;+&quot; * 80
+        if (dataLetta &gt; data) {
+            data = dataLetta
+        }
+
+    }
+    if (data &gt;= dataScelta) {
+        dataScelta = data
+        nomeScelto = name.toString()
+    }
+}
+println &quot;Scarico il tag &quot; + nomeScelto + &quot; con ultima commit &quot; + dataScelta
+def nuovoPath=&quot;tags/&quot;+nomeScelto
+def svnURL = parametri[&apos;pathSorgente&apos;].replace(&apos;&lt;&lt;TTLT&gt;&gt;&apos;, nuovoPath)
+def applicationID=parametri[&apos;applicationID&apos;]
+def idTecnologia=parametri[&apos;idTecnologia&apos;]
+def pathSorgente=parametri[&apos;pathSorgente&apos;]
+def descrizioneApp=parametri[&apos;descrizioneApp&apos;]
+def analisi=parametri[&apos;analisi&apos;]
+
+def job = Hudson.instance.getJob(&apos;A20_SVN_download_tags&apos;)
+    
+    def params = [
+      new StringParameterValue(&apos;applicationID&apos;, applicationID ),
+      new StringParameterValue(&apos;idTecnologia&apos;, idTecnologia),
+      new StringParameterValue(&apos;pathSorgente&apos;, svnURL ),    
+      new StringParameterValue(&apos;descrizioneApp&apos;, descrizioneApp),    
+      new StringParameterValue(&apos;TAG&apos;, nomeScelto),    
+      new StringParameterValue(&apos;analisi&apos;, analisi),    
+    ]
+    def future = job.scheduleBuild2(0,  new ParametersAction(params))
+
+println &quot;Lanciato job SVN_download_tags per applicazione &quot;+applicationID+&quot; Tecnologia &quot;+idTecnologia</script>
+              <sandbox>false</sandbox>
+            </script>
+          </source>
+        </hudson.plugins.groovy.SystemGroovy>
+      </conditionalbuilders>
+    </org.jenkinsci.plugins.conditionalbuildstep.ConditionalBuilder>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

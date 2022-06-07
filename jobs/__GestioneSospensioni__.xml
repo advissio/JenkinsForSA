@@ -1,0 +1,110 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition plugin="extended-choice-parameter@0.82">
+          <name>SOSPENDE</name>
+          <description>Sospende o ri-abilita l&apos;esecuzione dell&apos;analisi di una specifica applicazione per una delle sue tecnologie</description>
+          <quoteValue>false</quoteValue>
+          <saveJSONParameterToFile>false</saveJSONParameterToFile>
+          <visibleItemCount>10</visibleItemCount>
+          <type>PT_SINGLE_SELECT</type>
+          <groovyScript>def FI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaAppSospese&quot;)
+def l=&quot;&quot;
+FI.eachLine() {
+  campi=it.split(&quot;,&quot;)
+  stringa=campi[0]+&quot; tecnologia &quot;+campi[1]+&quot; &quot; 
+   if ( campi[2] != &quot;Abilitata&quot; )
+   {
+      stringa=stringa+&quot; - SOSPESA&quot;
+   }
+   stringa=stringa+&quot;,&quot;
+   l=l+stringa
+}
+return l</groovyScript>
+          <bindings></bindings>
+          <groovyClasspath></groovyClasspath>
+          <multiSelectDelimiter>,</multiSelectDelimiter>
+          <projectName>GestioneSospensioni</projectName>
+        </com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition>
+        <org.biouno.unochoice.ChoiceParameter plugin="uno-choice@2.5.1">
+          <name>AZIONE</name>
+          <description>Nuovo stato dell&apos;applicazione ?</description>
+          <randomName>choice-parameter-5326565264188203</randomName>
+          <visibleItemCount>1</visibleItemCount>
+          <script class="org.biouno.unochoice.model.GroovyScript">
+            <secureScript plugin="script-security@1.75">
+              <script>b=[&quot;Sospesa:selected&quot;,&quot;Abilitata&quot;]
+return b</script>
+              <sandbox>false</sandbox>
+            </secureScript>
+            <secureFallbackScript plugin="script-security@1.75">
+              <script></script>
+              <sandbox>false</sandbox>
+            </secureFallbackScript>
+          </script>
+          <projectName>GestioneSospensioni</projectName>
+          <projectFullName>GestioneSospensioni</projectFullName>
+          <choiceType>PT_RADIO</choiceType>
+          <filterable>false</filterable>
+          <filterLength>1</filterLength>
+        </org.biouno.unochoice.ChoiceParameter>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.31">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <customWorkspace>/var/jenkins_home/workspace</customWorkspace>
+  <builders>
+    <hudson.plugins.groovy.Groovy plugin="groovy@2.3">
+      <scriptSource class="hudson.plugins.groovy.StringScriptSource">
+        <command>def FI=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaAppSospese&quot;)
+def l=&quot;&quot;
+def records=[]
+def SOSPENDE=System.getenv(&quot;SOSPENDE&quot;)
+def AZIONE=System.getenv(&quot;AZIONE&quot;)
+def cerca=SOSPENDE.split(&quot;-&quot;)
+def stringaCerca=cerca[0].trim()
+FI.eachLine() {
+  campi=it.split(&quot;,&quot;)
+  stringa=campi[0].trim()+&quot; tecnologia &quot;+campi[1].trim() 
+  //println &quot;&gt;&quot;+stringa+&quot;&gt; &lt;&quot;+stringaCerca+&quot;&lt;&quot;
+  if ( stringa == stringaCerca )
+  {
+    stringa=campi[0].trim()+&quot;,&quot;+campi[1].trim() +&quot;,&quot;+AZIONE
+  }
+  else
+  {
+    stringa = it
+  }
+  records.add(stringa)
+}
+//def FO=new File(&quot;/var/jenkins_home/workspace/ApplicazioniDaAnalizzare.listaAppSospeseWRK&quot;)
+FI.write(&quot;&quot;)
+records.each() { FI.append(it+&quot;\n&quot;) }
+return 0</command>
+      </scriptSource>
+      <groovyName>groovy-3.0.6</groovyName>
+      <parameters></parameters>
+      <scriptParameters></scriptParameters>
+      <properties></properties>
+      <javaOpts></javaOpts>
+      <classPath></classPath>
+    </hudson.plugins.groovy.Groovy>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
